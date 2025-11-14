@@ -14,7 +14,8 @@ export default function SplashScreen() {
   useEffect(() => {
     setMounted(true);
 
-    const token = localStorage.getItem("authToken");
+    // const token = localStorage.getItem("authToken");
+    const token = true;
     const splashShown = localStorage.getItem("splashShown");
 
     if (splashShown) {
@@ -37,13 +38,6 @@ export default function SplashScreen() {
 
   return (
     <section className="flex flex-col items-center justify-center  text-center">
-      <Image
-        src="/assets/Logo.svg"
-        alt="Voxify Logo"
-        width={480}
-        height={480}
-        className="mb-4"
-      />
     </section>
   );
 }

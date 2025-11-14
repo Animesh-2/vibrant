@@ -2,8 +2,6 @@
 
 import { ThemeProvider } from "next-themes";
 import QueryProvider from "@/tanstack/providers/query-provider";
-import Navbar from "@/components/auth/Navbar";
-import MainSidebar from "@/components/auth/MainSidebar";
 import { usePathname } from "next/navigation";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
@@ -31,17 +29,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <div className="h-screen flex flex-col">
 
                 {/* NAVBAR */}
-                <Navbar />
+                {/* <Navbar /> */}
 
                 <div className="flex flex-1">
 
                   {/* SIDEBAR */}
-                  <div className="min-w-[25px]">
+                  {/* <div className="min-w-[25px]">
                     <MainSidebar />
-                  </div>
+                  </div> */}
 
                   {/* MAIN CONTENT WITH NAVBAR SPACE */}
-                  <main className="flex-1 bg-main overflow-y-auto rounded-tl-2xl h-[calc(100vh-64px)]">
+                  <main className="flex-1 bg-main overflow-y-auto rounded-tl-2xl">
                     {children}
                   </main>
                 </div>
