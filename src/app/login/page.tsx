@@ -2,29 +2,90 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
 
-  const handleLogin = (e: any) => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const selectedRole =
+    (searchParams.get("role")?.toUpperCase() as
+      | "DOCTOR"
+      | "PATIENT"
+      | "NURSE") || "PATIENT";
+
+  const handleChange = (e: any) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleLogin = async (e: any) => {
     e.preventDefault();
     setLoading(true);
 
-    setTimeout(() => {
+    try {
+      const res = await fetch("http://10.11.7.87:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: form.email,
+          password: form.password,
+          role: selectedRole,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!data.success) {
+        alert(data.message || "Invalid email or password");
+        setLoading(false);
+        return;
+      }
+
+      const { token, user } = data.data;
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("role", user.role);
+
+      document.cookie = `token=${token}; path=/; max-age=31536000`;
+      document.cookie = `role=${user.role}; path=/; max-age=31536000`;
+
+      if (user.role === "NURSE") router.push("/dashboard");
+      else if (user.role === "DOCTOR") router.push("/devices");
+      else router.push("/");
+
       setLoading(false);
-      alert("Logged in! (demo)");
-    }, 1200);
+    } catch (err) {
+      console.log(err);
+      alert("Server connection failed");
+      setLoading(false);
+    }
   };
+
+  const activeClass = (role: string) =>
+    selectedRole === role
+      ? "border-pink-500 shadow-[0_0_20px_rgba(255,0,180,0.5)] scale-[1.05] text-white"
+      : "border-white/10 text-gray-200";
 
   return (
     <div className="flex items-center justify-center mt-1 p-4">
-      {/* CARD */}
       <div
         className="w-full max-w-md rounded-2xl p-10 bg-white/5 backdrop-blur-xl 
       border border-white/10 shadow-[0_0_30px_rgba(255,0,150,0.15)]
       relative"
       >
-        {/* TITLE */}
         <h1
           className="text-3xl font-extrabold text-center bg-gradient-to-r 
         from-pink-400 to-violet-400 bg-clip-text text-transparent"
@@ -36,12 +97,13 @@ export default function LoginPage() {
           Login to continue using MerilCare
         </p>
 
-        {/* FORM */}
         <form onSubmit={handleLogin} className="mt-8 space-y-6">
-          {/* EMAIL */}
           <div>
             <label className="text-sm text-white">Email</label>
             <input
+              name="email"
+              value={form.email}
+              onChange={handleChange}
               type="email"
               required
               className="w-full mt-1 px-4 py-3 rounded-lg bg-black/30 border 
@@ -52,10 +114,12 @@ export default function LoginPage() {
             />
           </div>
 
-          {/* PASSWORD */}
           <div>
             <label className="text-sm text-white">Password</label>
             <input
+              name="password"
+              value={form.password}
+              onChange={handleChange}
               type="password"
               required
               className="w-full mt-1 px-4 py-3 rounded-lg bg-black/30 border 
@@ -66,7 +130,6 @@ export default function LoginPage() {
             />
           </div>
 
-          {/* FORGOT */}
           <div className="text-right">
             <Link
               href="/forgot-password"
@@ -76,7 +139,6 @@ export default function LoginPage() {
             </Link>
           </div>
 
-          {/* BUTTON */}
           <button
             type="submit"
             disabled={loading}
@@ -88,37 +150,36 @@ export default function LoginPage() {
             {loading ? "Logging in..." : "Login"}
           </button>
 
-          {/* ROLE SELECTOR */}
           <div className="mt-10 space-y-4">
             <p className="text-center text-white text-sm">Continue as</p>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {/* DOCTOR */}
               <Link
                 href="/login?role=doctor"
-                className="text-center px-4 py-3 rounded-lg bg-white/5 
-      border border-white/10 backdrop-blur-md 
-      hover:border-pink-500/40 hover:shadow-[0_0_20px_rgba(255,0,150,0.3)]
-      transition-all font-semibold text-gray-200"
+                className={`text-center px-4 py-3 rounded-lg bg-white/5 backdrop-blur-md 
+                font-semibold transition-all border hover:border-pink-400/40 
+                hover:shadow-[0_0_20px_rgba(255,0,180,0.3)] ${activeClass("DOCTOR")}`}
               >
                 Doctor
               </Link>
 
+              {/* PATIENT */}
               <Link
                 href="/login?role=patient"
-                className="text-center px-4 py-3 rounded-lg bg-white/5 
-      border border-white/10 backdrop-blur-md 
-      hover:border-violet-500/40 hover:shadow-[0_0_20px_rgba(150,0,255,0.3)]
-      transition-all font-semibold text-gray-200"
+                className={`text-center px-4 py-3 rounded-lg bg-white/5 backdrop-blur-md 
+                font-semibold transition-all border hover:border-violet-400/40 
+                hover:shadow-[0_0_20px_rgba(150,0,255,0.3)] ${activeClass("PATIENT")}`}
               >
                 Patient
               </Link>
 
+              {/* NURSE */}
               <Link
                 href="/login?role=nurse"
-                className="text-center px-4 py-3 rounded-lg bg-white/5 
-      border border-white/10 backdrop-blur-md 
-      hover:border-pink-400/40 hover:shadow-[0_0_20px_rgba(255,0,180,0.3)]
-      transition-all font-semibold text-gray-200"
+                className={`text-center px-4 py-3 rounded-lg bg-white/5 backdrop-blur-md 
+                font-semibold transition-all border hover:border-pink-300/40 
+                hover:shadow-[0_0_20px_rgba(255,0,200,0.3)] ${activeClass("NURSE")}`}
               >
                 Nurse
               </Link>
@@ -126,7 +187,6 @@ export default function LoginPage() {
           </div>
         </form>
 
-        {/* CREATE ACCOUNT */}
         <p className="text-center text-white mt-8">
           New here?{" "}
           <Link
