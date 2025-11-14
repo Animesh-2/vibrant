@@ -4,9 +4,9 @@ import Link from "next/link";
 import { ShoppingCart, ShieldCheck, Sparkles } from "lucide-react";
 import { useCart } from "@/lib/hooks/cart";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useAuth, UserRole } from "@/app/AuthProvider/page";
 
-const roleLinks: Record<string, { href: string; label: string }[]> = {
+const roleLinks: Record<UserRole, { href: string; label: string }[]> = {
   DOCTOR: [
     { href: "/devices", label: "Devices" },
     { href: "/caregivers", label: "Nurses" },
@@ -26,27 +26,15 @@ const roleLinks: Record<string, { href: string; label: string }[]> = {
   DEFAULT: [],
 };
 
-export default function Navbar({ initialRole }: { initialRole: string }) {
+export default function Navbar() {
   const pathname = usePathname();
   const { data: cart = [] } = useCart();
 
-  const [role, setRole] = useState(initialRole || "DEFAULT");
-
-  useEffect(() => {
-    const cookieRole =
-      document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("role="))
-        ?.split("=")[1] || null;
-
-    const localRole = localStorage.getItem("role");
-
-    if (cookieRole) setRole(cookieRole);
-    else if (localRole) setRole(localRole);
-  }, []);
+  // 🎯 FIX: Get state and setter from context
+  const { role, setRole } = useAuth();
 
   const handleLogout = () => {
-    // Clear localStorage
+    // Clear persisted storage
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("role");
@@ -55,7 +43,7 @@ export default function Navbar({ initialRole }: { initialRole: string }) {
     document.cookie = "token=; path=/; max-age=0";
     document.cookie = "role=; path=/; max-age=0";
 
-    // Reset role state
+    // 🎯 FIX: Reset role state using context (instant update!)
     setRole("DEFAULT");
 
     // Redirect
@@ -67,7 +55,6 @@ export default function Navbar({ initialRole }: { initialRole: string }) {
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#060910]/90 backdrop-blur-xl">
       <div className="mx-auto flex w-full items-center justify-between px-4 py-5">
-
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <ShieldCheck className="h-6 w-6 text-pink-400" />

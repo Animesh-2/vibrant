@@ -43,14 +43,28 @@ export default async function DeviceDetailPage({ params }: Props) {
               <p className="text-xs uppercase tracking-[0.4em] text-white">
                 {device.category}
               </p>
-              <h1 className="mt-2 text-3xl font-semibold text-white">{device.name}</h1>
+              <h1 className="mt-2 text-3xl font-semibold text-white">
+                {device.name}
+              </h1>
               <p className="mt-3 text-sm text-white">{device.description}</p>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-3">
-              <SpecTile icon={<Clock3 className="h-4 w-4" />} label="Dispatch" value={device.availability} />
-              <SpecTile icon={<BadgeCheck className="h-4 w-4" />} label="Rating" value={`${device.rating} ★`} />
-              <SpecTile icon={<Shield className="h-4 w-4" />} label="Maintenance" value="NABL-certified" />
+              <SpecTile
+                icon={<Clock3 className="h-4 w-4" />}
+                label="Dispatch"
+                value={device.availability}
+              />
+              <SpecTile
+                icon={<BadgeCheck className="h-4 w-4" />}
+                label="Rating"
+                value={`${device.rating} ★`}
+              />
+              <SpecTile
+                icon={<Shield className="h-4 w-4" />}
+                label="Maintenance"
+                value="NABL-certified"
+              />
             </div>
 
             <div className="flex flex-wrap gap-3">
@@ -95,9 +109,16 @@ export default async function DeviceDetailPage({ params }: Props) {
             </p>
           </div>
           <div className="rounded-2xl border border-white/10 bg-black/30 p-4 text-sm text-white">
-            Includes 24/7 remote monitoring, on-site engineer, and AI-driven service logs.
+            Includes 24/7 remote monitoring, on-site engineer, and AI-driven
+            service logs.
           </div>
-          <BookingModal deviceId={device.id} pricePerDay={device.pricePerDay} />
+          <BookingModal
+            deviceId={device.id}
+            pricePerDay={device.pricePerDay}
+            deviceImage={device.image}
+            deviceName={device.name}
+          />
+
           <div className="text-xs text-white">
             Need a caretaker as well?
             <a
@@ -113,7 +134,9 @@ export default async function DeviceDetailPage({ params }: Props) {
       {related.length > 0 && (
         <section className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-white">Similar devices</h2>
+            <h2 className="text-xl font-semibold text-white">
+              Similar devices
+            </h2>
             <span className="text-sm text-white">
               Category | {device.category}
             </span>

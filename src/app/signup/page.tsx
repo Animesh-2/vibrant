@@ -3,10 +3,14 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useAuth, UserRole } from "../AuthProvider/page";
+
 
 export default function SignupPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  // 🎯 FIX: Destructure setRole and setErrorMessage from context
+  const { setRole, setErrorMessage } = useAuth();
 
   // role from URL → default: PATIENT
   const selectedRole =
@@ -41,7 +45,8 @@ export default function SignupPage() {
     e.preventDefault();
 
     if (form.password !== form.confirm) {
-      alert("Passwords do not match");
+      // 🎯 FIX: Replaced alert() with context error message
+      setErrorMessage("Passwords do not match");
       return;
     }
 
@@ -67,7 +72,8 @@ export default function SignupPage() {
       const data = await res.json();
 
       if (!data.success) {
-        alert(data.message || "Something went wrong");
+        // 🎯 FIX: Replaced alert() with context error message
+        setErrorMessage(data.message || "Something went wrong during registration.");
         setLoading(false);
         return;
       }
@@ -78,6 +84,9 @@ export default function SignupPage() {
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("role", user.role);
+      
+      // 🎯 FIX: IMMEDIATELY UPDATE THE GLOBAL CONTEXT STATE
+      setRole(user.role as UserRole);
 
       // Redirect based on role
       if (user.role === "NURSE") router.push("/dashboard");
@@ -86,7 +95,8 @@ export default function SignupPage() {
 
       setLoading(false);
     } catch (error) {
-      alert("Error connecting to server");
+      // 🎯 FIX: Replaced alert() with context error message
+      setErrorMessage("Error connecting to server. Please check your network.");
       setLoading(false);
     }
   };

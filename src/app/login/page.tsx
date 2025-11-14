@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useAuth, UserRole } from "../AuthProvider/page";
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
@@ -13,6 +14,8 @@ export default function LoginPage() {
 
   const searchParams = useSearchParams();
   const router = useRouter();
+  // 🎯 FIX: Destructure setRole and setErrorMessage from context
+  const { setRole, setErrorMessage } = useAuth();
 
   const selectedRole =
     (searchParams.get("role")?.toUpperCase() as
@@ -48,7 +51,8 @@ export default function LoginPage() {
       const data = await res.json();
 
       if (!data.success) {
-        alert(data.message || "Invalid email or password");
+        // 🎯 FIX: Replaced alert() with context error message
+        setErrorMessage(data.message || "Invalid email or password");
         setLoading(false);
         return;
       }
@@ -62,6 +66,9 @@ export default function LoginPage() {
       document.cookie = `token=${token}; path=/; max-age=31536000`;
       document.cookie = `role=${user.role}; path=/; max-age=31536000`;
 
+      // 🎯 FIX: IMMEDIATELY UPDATE THE GLOBAL CONTEXT STATE (Instant Navbar update!)
+      setRole(user.role as UserRole);
+
       if (user.role === "NURSE") router.push("/dashboard");
       else if (user.role === "DOCTOR") router.push("/devices");
       else router.push("/");
@@ -69,7 +76,8 @@ export default function LoginPage() {
       setLoading(false);
     } catch (err) {
       console.log(err);
-      alert("Server connection failed");
+      // 🎯 FIX: Replaced alert() with context error message
+      setErrorMessage("Server connection failed");
       setLoading(false);
     }
   };
@@ -149,42 +157,6 @@ export default function LoginPage() {
           >
             {loading ? "Logging in..." : "Login"}
           </button>
-
-          <div className="mt-10 space-y-4">
-            <p className="text-center text-white text-sm">Continue as</p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {/* DOCTOR */}
-              <Link
-                href="/login?role=doctor"
-                className={`text-center px-4 py-3 rounded-lg bg-white/5 backdrop-blur-md 
-                font-semibold transition-all border hover:border-pink-400/40 
-                hover:shadow-[0_0_20px_rgba(255,0,180,0.3)] ${activeClass("DOCTOR")}`}
-              >
-                Doctor
-              </Link>
-
-              {/* PATIENT */}
-              <Link
-                href="/login?role=patient"
-                className={`text-center px-4 py-3 rounded-lg bg-white/5 backdrop-blur-md 
-                font-semibold transition-all border hover:border-violet-400/40 
-                hover:shadow-[0_0_20px_rgba(150,0,255,0.3)] ${activeClass("PATIENT")}`}
-              >
-                Patient
-              </Link>
-
-              {/* NURSE */}
-              <Link
-                href="/login?role=nurse"
-                className={`text-center px-4 py-3 rounded-lg bg-white/5 backdrop-blur-md 
-                font-semibold transition-all border hover:border-pink-300/40 
-                hover:shadow-[0_0_20px_rgba(255,0,200,0.3)] ${activeClass("NURSE")}`}
-              >
-                Nurse
-              </Link>
-            </div>
-          </div>
         </form>
 
         <p className="text-center text-white mt-8">

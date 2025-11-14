@@ -1,14 +1,22 @@
 'use client';
 
-import { type ChangeEvent, useState } from 'react';
+import { type ChangeEvent, useState, useEffect } from 'react';
 import { bookDevice } from '@/lib/api';
+import { useAddToCart } from '@/lib/hooks/cart';
 
 type Props = {
   deviceId: string;
   pricePerDay: number;
+  deviceImage: string;
+  deviceName: string;
 };
 
-export default function BookingModal({ deviceId, pricePerDay }: Props) {
+export default function BookingModal({
+  deviceId,
+  pricePerDay,
+  deviceImage,
+  deviceName,
+}: Props) {
   const [open, setOpen] = useState(false);
   const [start, setStart] = useState('');
   const [end, setEnd] = useState('');
@@ -16,20 +24,58 @@ export default function BookingModal({ deviceId, pricePerDay }: Props) {
   const [message, setMessage] = useState<string | null>(null);
   const [bookingCode, setBookingCode] = useState<string | null>(null);
 
+  const { mutate: addToCart } = useAddToCart();
+
+  // Load saved details
+  useEffect(() => {
+    const raw = localStorage.getItem(`booking:${deviceId}`);
+    if (!raw) return;
+
+    const saved = JSON.parse(raw);
+    setStart(saved.start || '');
+    setEnd(saved.end || '');
+    setMessage(saved.message || null);
+    setBookingCode(saved.bookingCode || null);
+  }, [deviceId]);
+
+  // Auto-save to localStorage
+  useEffect(() => {
+    const data = { start, end, message, bookingCode };
+    localStorage.setItem(`booking:${deviceId}`, JSON.stringify(data));
+  }, [start, end, message, bookingCode, deviceId]);
+
   async function handleBook(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
     setMessage(null);
+
     try {
       const response = await bookDevice(deviceId, {
         user_id: 'nurse-demo',
         start,
         end,
       });
+
       setBookingCode(response.bookingId);
-      setMessage(
-        `Slot blocked for ${response.totalDays} day(s). Ops team will confirm shortly.`
-      );
+      const msg = `Slot blocked for ${response.totalDays} day(s). Ops team will confirm shortly.`;
+      setMessage(msg);
+
+      // Add to cart
+      addToCart({
+        id: deviceId,
+        name: deviceName,
+        image: deviceImage,
+        start,
+        end,
+        days: response.totalDays,
+        pricePerDay,
+        totalCost: response.totalDays * pricePerDay,
+        bookingCode: response.bookingId,
+      });
+
+      // ⭐ CLOSE MODAL AFTER SUCCESS
+      setTimeout(() => setOpen(false), 400);
+
     } catch {
       setMessage('Booking failed. Please retry or contact concierge.');
     } finally {
@@ -62,10 +108,7 @@ export default function BookingModal({ deviceId, pricePerDay }: Props) {
                 </h3>
               </div>
               <button
-                onClick={() => {
-                  setOpen(false);
-                  setMessage(null);
-                }}
+                onClick={() => setOpen(false)}
                 className="text-sm text-white hover:text-white"
               >
                 Close
@@ -154,11 +197,10 @@ function calcTotal(start: string, end: string, perDay: number) {
   try {
     const s = new Date(start);
     const e = new Date(end);
-    const diff =
-      Math.max(
-        1,
-        Math.ceil((e.getTime() - s.getTime()) / (1000 * 60 * 60 * 24))
-      ) + 1;
+    const diff = Math.max(
+      1,
+      Math.ceil((e.getTime() - s.getTime()) / 86400000)
+    ) + 1;
     return diff * perDay;
   } catch {
     return perDay;
