@@ -37,14 +37,14 @@ export default async function HomePage() {
         <div className="grid gap-10 lg:grid-cols-[2fr,1fr]">
           <div>
             <p className="text-sm uppercase tracking-[0.4em] text-pink-200">
-              VIBRANT Health Stack
+              MerilCare Health Stack
             </p>
             <h1 className="mt-6 text-4xl font-semibold leading-tight sm:text-5xl">
               Rent medical devices, hire caregivers, and unlock AI-verified
               nursing actions in one flow.
             </h1>
             <p className="mt-6 text-lg text-gray-200">
-              From ICU ventilators to pediatric nurses, VIBRANT keeps families,
+              From ICU ventilators to pediatric nurses, MerilCare keeps families,
               hospitals, and homecare teams aligned. Manage carts, approvals,
               and time slots without juggling multiple tools.
             </p>

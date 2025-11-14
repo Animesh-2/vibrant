@@ -379,7 +379,7 @@ export const nurseRequests: NurseRequest[] = [
     acuity: "High",
     scheduledFor: "Friday | 14:00 - 19:00",
     status: "approved",
-    notes: "Oncologist will join remotely via VIBRANT Connect link.",
+    notes: "Oncologist will join remotely via MerilCare Connect link.",
   },
 ];
 

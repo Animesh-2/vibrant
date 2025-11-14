@@ -59,7 +59,7 @@ export default function Navbar() {
         <Link href="/" className="flex items-center gap-2">
           <ShieldCheck className="h-6 w-6 text-pink-400" />
           <span className="text-xl font-black tracking-tight text-white">
-            VIBRANT
+            MerilCare
           </span>
         </Link>
 

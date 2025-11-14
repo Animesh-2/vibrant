@@ -3,6 +3,7 @@
 import type { Nurse } from "@/data/mockData";
 import { useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 type Props = {
   nurse: Nurse;
@@ -14,40 +15,38 @@ export default function NurseSlotPicker({ nurse }: Props) {
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [notes, setNotes] = useState("");
-  const [message, setMessage] = useState<string | null>(null);
 
   async function requestBooking() {
-    // VALIDATION
     if (!dateFrom || !dateTo) {
-      setMessage("Please select both start and end date.");
+      toast.error("Bro pick both start & end date 😭");
       return;
     }
 
-    const caregiverId = Number(nurse.id.replace(/\D/g, "")); // "NUR-1002" → 1002
+    const caregiverId = Number(nurse.id.replace(/\D/g, ""));
     const token = localStorage.getItem("token");
 
     try {
-      const res = await axios.post(
+      await axios.post(
         `${API_BASE}/api/bookings/request`,
         {
           caregiverId,
           dateFrom: new Date(dateFrom).toISOString(),
           dateTo: new Date(dateTo).toISOString(),
           notes: notes || "",
-          totalAmount: 0   // required by backend
+          totalAmount: 0,
         },
         {
           headers: {
             "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {})
-          }
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
         }
       );
 
-      setMessage("Booking request successfully sent!");
+      toast.success("Booking request received 🎉");
     } catch (err: any) {
       console.error(err);
-      setMessage(err.response?.data?.message || "Booking failed");
+      toast.error(err.response?.data?.message || "Something went sideways 😕");
     }
   }
 
@@ -92,13 +91,6 @@ export default function NurseSlotPicker({ nurse }: Props) {
       >
         Request Booking
       </button>
-
-      {/* MESSAGE */}
-      {message && (
-        <div className="rounded-xl bg-black/40 border border-white/10 p-3 text-xs text-white mt-2">
-          {message}
-        </div>
-      )}
     </div>
   );
 }
