@@ -498,9 +498,7 @@ textarea::-moz-placeholder {
 
 input::placeholder,
 textarea::placeholder {
-  opacity: 1;
-  /* 1 */
-  color: #9ca3af;
+  color: white;
   /* 2 */
 }
 
@@ -1045,7 +1043,7 @@ video {
   line-height: 1;
 }
 
-.text-gray-400 {
+.text-white {
   --tw-text-opacity: 1;
   color: rgb(156 163 175 / var(--tw-text-opacity, 1));
 }
@@ -1070,7 +1068,7 @@ video {
   color: rgb(31 41 55 / var(--tw-text-opacity, 1));
 }
 
-.text-gray-900 {
+.text-white {
   --tw-text-opacity: 1;
   color: rgb(17 24 39 / var(--tw-text-opacity, 1));
 }

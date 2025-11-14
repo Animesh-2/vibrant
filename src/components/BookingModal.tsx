@@ -34,6 +34,7 @@ export default function BookingModal({ deviceId, pricePerDay }: { deviceId: stri
             <h3 className="text-lg font-semibold">Reserve device</h3>
             <form onSubmit={handleBook} className="mt-4 space-y-3">
               <div>
+<<<<<<< Updated upstream
                 <label className="text-sm text-gray-400">Start</label>
                 <input type="date" value={start} onChange={e=>setStart(e.target.value)} required className="w-full p-2 rounded bg-gray-900 border border-gray-800" />
               </div>
@@ -47,6 +48,52 @@ export default function BookingModal({ deviceId, pricePerDay }: { deviceId: stri
                 <div className="flex gap-2">
                   <button type="button" onClick={()=>setOpen(false)} className="px-3 py-1 rounded border border-gray-700">Close</button>
                   <button type="submit" disabled={loading} className="px-3 py-1 bg-white text-black rounded">Confirm</button>
+=======
+                <p className="text-xs uppercase tracking-[0.4em] text-white">
+                  Reservation
+                </p>
+                <h3 className="text-2xl font-semibold text-white">
+                  Schedule delivery
+                </h3>
+              </div>
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  setMessage(null);
+                }}
+                className="text-sm text-white hover:text-white"
+              >
+                Close
+              </button>
+            </div>
+
+            <form onSubmit={handleBook} className="mt-6 space-y-4 text-sm">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field
+                  label="Start date"
+                  value={start}
+                  onChange={(e) => setStart(e.target.value)}
+                />
+                <Field
+                  label="End date"
+                  value={end}
+                  onChange={(e) => setEnd(e.target.value)}
+                />
+              </div>
+
+              <div className="rounded-2xl border border-white/10 bg-black/30 p-4 text-white">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.3em] text-white">
+                      Estimated charge
+                    </p>
+                    <p className="text-2xl font-semibold">₹{estimatedCost}</p>
+                    <p className="text-xs text-white">₹{pricePerDay}/day</p>
+                  </div>
+                  <div className="text-right text-xs text-white">
+                    Includes doorstep QC, installation, and pickup.
+                  </div>
+>>>>>>> Stashed changes
                 </div>
               </div>
 
@@ -56,7 +103,34 @@ export default function BookingModal({ deviceId, pricePerDay }: { deviceId: stri
         </div>
       )}
     </>
+<<<<<<< Updated upstream
   )
+=======
+  );
+}
+
+function Field({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+}) {
+  return (
+    <label className="text-xs uppercase tracking-[0.3em] text-white">
+      {label}
+      <input
+        required
+        type="date"
+        value={value}
+        onChange={onChange}
+        className="mt-2 w-full rounded-2xl border border-white/10 bg-black/40 px-3 py-3 text-white focus:border-pink-400 focus:outline-none"
+      />
+    </label>
+  );
+>>>>>>> Stashed changes
 }
 
 function calcTotal(start: string, end: string, perDay: number) {
