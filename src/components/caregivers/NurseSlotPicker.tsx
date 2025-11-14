@@ -2,68 +2,103 @@
 
 import type { Nurse } from "@/data/mockData";
 import { useState } from "react";
+import axios from "axios";
 
 type Props = {
   nurse: Nurse;
 };
 
+const API_BASE = "http://10.11.7.87:5000";
+
 export default function NurseSlotPicker({ nurse }: Props) {
-  const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
+  const [notes, setNotes] = useState("");
   const [message, setMessage] = useState<string | null>(null);
 
+  async function requestBooking() {
+    // VALIDATION
+    if (!dateFrom || !dateTo) {
+      setMessage("Please select both start and end date.");
+      return;
+    }
+
+    const caregiverId = Number(nurse.id.replace(/\D/g, "")); // "NUR-1002" → 1002
+    const token = localStorage.getItem("token");
+
+    try {
+      const res = await axios.post(
+        `${API_BASE}/api/bookings/request`,
+        {
+          caregiverId,
+          dateFrom: new Date(dateFrom).toISOString(),
+          dateTo: new Date(dateTo).toISOString(),
+          notes: notes || "",
+          totalAmount: 0   // required by backend
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {})
+          }
+        }
+      );
+
+      setMessage("Booking request successfully sent!");
+    } catch (err: any) {
+      console.error(err);
+      setMessage(err.response?.data?.message || "Booking failed");
+    }
+  }
+
   return (
-    <div className="space-y-4 rounded-3xl border border-white/10 bg-white/5 p-5">
-      <h3 className="text-lg font-semibold text-white">Select a slot</h3>
-      <p className="text-xs uppercase tracking-[0.3em] text-white">
-        Live availability
-      </p>
-      <div className="space-y-3">
-        {nurse.availability.map((block) => (
-          <div key={block.day}>
-            <p className="text-sm text-white">{block.day}</p>
-            <div className="mt-2 flex flex-wrap gap-2">
-              {block.slots.map((slot) => {
-                const key = `${block.day}-${slot}`;
-                const active = selectedSlot === key;
-                return (
-                  <button
-                    key={key}
-                    onClick={() => {
-                      setSelectedSlot(key);
-                      setMessage(null);
-                    }}
-                    className={`rounded-full border px-3 py-1 text-xs transition ${
-                      active
-                        ? "border-transparent bg-gradient-to-r from-pink-500 to-violet-500 text-white"
-                        : "border-white/15 text-white hover:border-white/40"
-                    }`}
-                  >
-                    {slot}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        ))}
+    <div className="space-y-5 rounded-3xl border border-white/10 bg-white/5 p-5">
+      <h3 className="text-lg font-semibold text-white">Book Appointment</h3>
+
+      {/* DATE FROM */}
+      <div className="space-y-1">
+        <label className="text-xs text-white/70">Start Date & Time</label>
+        <input
+          type="datetime-local"
+          value={dateFrom}
+          onChange={(e) => setDateFrom(e.target.value)}
+          className="w-full rounded-xl bg-black/30 border border-white/10 p-2 text-white"
+        />
       </div>
 
+      {/* DATE TO */}
+      <div className="space-y-1">
+        <label className="text-xs text-white/70">End Date & Time</label>
+        <input
+          type="datetime-local"
+          value={dateTo}
+          onChange={(e) => setDateTo(e.target.value)}
+          className="w-full rounded-xl bg-black/30 border border-white/10 p-2 text-white"
+        />
+      </div>
+
+      {/* NOTES */}
+      <textarea
+        value={notes}
+        onChange={(e) => setNotes(e.target.value)}
+        placeholder="Notes (optional)"
+        className="w-full rounded-xl bg-black/30 border border-white/10 p-2 text-white text-sm"
+      />
+
+      {/* BUTTON */}
       <button
-        onClick={() =>
-          selectedSlot
-            ? setMessage(`Slot ${selectedSlot.split("-").pop()} requested.`)
-            : setMessage("Select a slot to continue.")
-        }
-        className="w-full rounded-2xl bg-gradient-to-r from-pink-500 to-violet-500 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-pink-500/20 transition hover:shadow-pink-500/40"
+        onClick={requestBooking}
+        className="w-full rounded-2xl bg-gradient-to-r from-pink-500 to-violet-500 px-4 py-3 text-sm font-semibold text-white"
       >
-        Request booking
+        Request Booking
       </button>
 
+      {/* MESSAGE */}
       {message && (
-        <div className="rounded-2xl border border-white/10 bg-black/30 p-3 text-xs text-white">
+        <div className="rounded-xl bg-black/40 border border-white/10 p-3 text-xs text-white mt-2">
           {message}
         </div>
       )}
     </div>
   );
 }
-

@@ -1,13 +1,7 @@
 import NurseDashboard from "@/components/dashboard/NurseDashboard";
-import { getDashboardSnapshot, getNurseRequests } from "@/lib/api";
 import Link from "next/link";
 
-export default async function DashboardPage() {
-  const [summary, requests] = await Promise.all([
-    getDashboardSnapshot(),
-    getNurseRequests(),
-  ]);
-
+export default function DashboardPage() {
   return (
     <div className="space-y-8">
       <header className="flex flex-wrap items-center justify-between gap-4">
@@ -19,10 +13,10 @@ export default async function DashboardPage() {
             Availability & approvals dashboard
           </h1>
           <p className="text-sm text-white">
-            Keep shifts, logistics, and AI verification steps in sync. Slots that you
-            confirm here reflect in patient carts immediately.
+            Keep shifts, logistics, and AI verification steps in sync.
           </p>
         </div>
+
         <Link
           href="/dashboard/verification"
           className="rounded-full border border-white/10 px-4 py-2 text-sm text-white hover:border-pink-400"
@@ -31,7 +25,7 @@ export default async function DashboardPage() {
         </Link>
       </header>
 
-      <NurseDashboard summary={summary} requests={requests} />
+      <NurseDashboard />
     </div>
   );
 }

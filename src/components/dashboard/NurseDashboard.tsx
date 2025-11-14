@@ -1,151 +1,251 @@
 'use client';
 
-import type { NurseRequest } from "@/data/mockData";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
-type Props = {
-  summary: {
-    totalHours: number;
-    openRequests: number;
-    aiApprovals: number;
-    fulfillment: number;
+const API = "http://10.11.7.87:5000";
+
+type BookingRequest = {
+  id: number;
+  dateFrom: string;
+  dateTo: string;
+  notes: string;
+  status: string; // NEW
+  requesterId: number;
+  requester: {
+    id: number;
+    name: string;
+    email: string;
   };
-  requests: NurseRequest[];
 };
 
-const defaultAvailability = [
-  { day: "Today", slots: ["08:00 - 12:00", "18:00 - 22:00"] },
-  { day: "Tomorrow", slots: ["Night shift"] },
-  { day: "Fri", slots: ["Full day"] },
-];
+export default function NurseDashboard() {
+  const [requests, setRequests] = useState<BookingRequest[]>([]);
+  const [selected, setSelected] = useState<BookingRequest | null>(null);
 
-export default function NurseDashboard({ summary, requests }: Props) {
-  const [availability, setAvailability] = useState(defaultAvailability);
-  const [selectedRequest, setSelectedRequest] = useState<string | null>(null);
+  const [patientPrescriptions, setPatientPrescriptions] = useState<any[]>([]);
+  const [loadingDetails, setLoadingDetails] = useState(false);
 
-  function toggleSlot(day: string, slot: string) {
-    setAvailability((prev) =>
-      prev.map((record) =>
-        record.day === day
-          ? {
-              ...record,
-              slots: record.slots.includes(slot)
-                ? record.slots.filter((s) => s !== slot)
-                : [...record.slots, slot],
-            }
-          : record
-      )
-    );
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+  /** ----------------------------------------------------------------
+   * 🟣 LOAD ALL INCOMING REQUESTS
+   * ---------------------------------------------------------------- */
+  async function loadRequests() {
+    try {
+      const res = await axios.get(`${API}/api/nurse/booking/requests`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setRequests(res.data.data || []);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to load requests");
+    }
+  }
+
+  useEffect(() => {
+    loadRequests();
+  }, []);
+
+  /** ----------------------------------------------------------------
+   * 🟢 ACCEPT REQUEST
+   * ---------------------------------------------------------------- */
+  async function acceptRequest(id: number, patientId: number) {
+    try {
+      await axios.post(
+        `${API}/api/nurse/booking/${id}/accept`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      // Update selected status
+      setSelected((prev) => prev && { ...prev, status: "RESERVED" });
+
+      loadPatientPrescriptions(patientId);
+    } catch (err) {
+      console.log(err);
+      alert("Failed to accept");
+    }
+  }
+
+  /** ----------------------------------------------------------------
+   * 🔵 LOAD PATIENT PRESCRIPTIONS
+   * ---------------------------------------------------------------- */
+  async function loadPatientPrescriptions(patientId: number) {
+    setLoadingDetails(true);
+
+    try {
+      const res = await axios.get(
+        `${API}/api/patient/prescriptions?patientId=${patientId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setPatientPrescriptions(res.data.data || []);
+    } catch (err) {
+      console.log(err);
+    }
+
+    setLoadingDetails(false);
+  }
+
+  /** ----------------------------------------------------------------
+   * 🔴 DECLINE REQUEST
+   * ---------------------------------------------------------------- */
+  async function declineRequest(id: number) {
+    try {
+      await axios.post(
+        `${API}/api/nurse/booking/${id}/decline`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      // Update selected status
+      setSelected((prev) => prev && { ...prev, status: "CANCELLED" });
+
+    } catch (err) {
+      console.log(err);
+      alert("Failed to decline");
+    }
   }
 
   return (
     <div className="space-y-8">
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {[
-          { label: "Hours this week", value: `${summary.totalHours}` },
-          { label: "Open requests", value: `${summary.openRequests}` },
-          { label: "AI approvals", value: `${summary.aiApprovals}` },
-          { label: "Fulfillment", value: `${summary.fulfillment}%` },
-        ].map((item) => (
-          <div
-            key={item.label}
-            className="rounded-3xl border border-white/10 bg-white/5 p-5 text-sm text-white"
-          >
-            <p className="text-xs uppercase tracking-[0.3em] text-white">
-              {item.label}
-            </p>
-            <p className="mt-2 text-3xl font-semibold text-white">{item.value}</p>
-          </div>
-        ))}
+
+      {/* LEFT LIST */}
+      <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
+        <h2 className="text-lg font-semibold text-white">Request Approvals</h2>
+
+        {requests.length === 0 && (
+          <p className="text-white/60 text-sm mt-3">No requests available.</p>
+        )}
+
+        {requests.map((req) => {
+          const active = selected?.id === req.id;
+
+          return (
+            <button
+              key={req.id}
+              onClick={() => {
+                setSelected(req);
+                setPatientPrescriptions([]);
+              }}
+              className={`w-full rounded-2xl border px-4 py-3 text-left text-sm transition mt-3 ${
+                active
+                  ? "border-transparent bg-gradient-to-r from-pink-500/20 to-violet-500/20 text-white"
+                  : "border-white/10 text-white hover:border-white/30"
+              }`}
+            >
+              <div className="flex justify-between text-xs uppercase text-white/80">
+                <span>{req.requester.name}</span>
+                <span>{new Date(req.dateFrom).toLocaleDateString()}</span>
+              </div>
+
+              <p className="text-sm mt-1 text-white">{req.notes || "No notes"}</p>
+
+              <p className="text-xs mt-1 text-white/60">
+                Status:{" "}
+                {req.status === "REQUESTED" && "Pending"}
+                {req.status === "RESERVED" && "Accepted"}
+                {req.status === "CANCELLED" && "Rejected"}
+              </p>
+            </button>
+          );
+        })}
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        <div className="space-y-4 rounded-3xl border border-white/10 bg-white/5 p-5">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-lg font-semibold text-white">
-                Availability management
-              </h2>
-              <p className="text-xs uppercase tracking-[0.3em] text-white">
-                Sync with families
-              </p>
-            </div>
-            <button className="text-xs text-pink-300 underline decoration-dotted">
-              Share calendar
-            </button>
-          </div>
-          <div className="space-y-4">
-            {availability.map((record) => (
-              <div key={record.day}>
-                <p className="text-sm text-white">{record.day}</p>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {record.slots.map((slot) => (
-                    <button
-                      key={slot}
-                      onClick={() => toggleSlot(record.day, slot)}
-                      className="rounded-full border border-white/15 px-3 py-1 text-xs text-white hover:border-pink-400"
-                    >
-                      {slot}
-                    </button>
-                  ))}
-                  <button
-                    onClick={() => toggleSlot(record.day, "On call")}
-                    className="rounded-full border border-dashed border-white/15 px-3 py-1 text-xs text-white"
-                  >
-                    + slot
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+      {/* RIGHT PANEL */}
+      {selected && (
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-6 space-y-5">
+          
+          <h2 className="text-xl font-semibold text-white">Booking Request</h2>
 
-        <div className="space-y-4 rounded-3xl border border-white/10 bg-white/5 p-5">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-lg font-semibold text-white">
-                Request approvals
-              </h2>
-              <p className="text-xs uppercase tracking-[0.3em] text-white">
-                Pending ({requests.length})
-              </p>
-            </div>
-          </div>
-          <div className="space-y-3">
-            {requests.map((request) => {
-              const active = selectedRequest === request.id;
-              return (
-                <button
-                  key={request.id}
-                  onClick={() => setSelectedRequest(request.id)}
-                  className={`w-full rounded-2xl border px-4 py-3 text-left text-sm transition ${
-                    active
-                      ? "border-transparent bg-gradient-to-r from-pink-500/20 to-violet-500/20 text-white"
-                      : "border-white/10 text-white hover:border-white/30"
-                  }`}
-                >
-                  <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-white">
-                    <span>{request.patient}</span>
-                    <span>{request.acuity}</span>
-                  </div>
-                  <p className="mt-1 text-base text-white">{request.procedure}</p>
-                  <p className="text-xs text-white">{request.location}</p>
-                  <p className="mt-1 text-xs text-white">
-                    {request.scheduledFor}
-                  </p>
-                </button>
-              );
-            })}
-          </div>
-          {selectedRequest && (
-            <div className="rounded-2xl border border-white/10 bg-black/30 p-4 text-xs text-white">
-              Request {selectedRequest} pre-approved. AI verification checklist will
-              be generated once you confirm.
+          <p className="text-sm text-white/70">
+            Patient: {selected.requester.name}
+          </p>
+          <p className="text-sm text-white/70">
+            Email: {selected.requester.email}
+          </p>
+
+          <p className="text-sm text-white/70">
+            From: {new Date(selected.dateFrom).toLocaleString()}
+          </p>
+          <p className="text-sm text-white/70">
+            To: {new Date(selected.dateTo).toLocaleString()}
+          </p>
+
+          {/* STATUS */}
+          <p className="text-sm text-white/80 mt-2">
+            Status:{" "}
+            {selected.status === "REQUESTED" && (
+              <span className="text-yellow-300">Pending</span>
+            )}
+            {selected.status === "RESERVED" && (
+              <span className="text-green-300">Accepted</span>
+            )}
+            {selected.status === "CANCELLED" && (
+              <span className="text-red-300">Rejected</span>
+            )}
+          </p>
+
+          {/* SHOW BUTTONS ONLY IF STILL PENDING */}
+          {selected.status === "REQUESTED" && (
+            <div className="flex gap-3 mt-4">
+              <button
+                onClick={() =>
+                  acceptRequest(selected.id, selected.requesterId)
+                }
+                className="px-4 py-2 bg-green-500 text-white rounded-xl"
+              >
+                Accept
+              </button>
+
+              <button
+                onClick={() => declineRequest(selected.id)}
+                className="px-4 py-2 bg-red-500 text-white rounded-xl"
+              >
+                Reject
+              </button>
             </div>
           )}
+
+          {/* SHOW PRESCRIPTIONS ONLY IF ACCEPTED */}
+          {selected.status === "RESERVED" && (
+            <div className="space-y-4 mt-5">
+              <h3 className="text-lg text-white">Medication History</h3>
+
+              {loadingDetails && <p className="text-white">Loading…</p>}
+
+              {!loadingDetails &&
+                patientPrescriptions.length === 0 && (
+                  <p className="text-white/60 text-sm">
+                    No prescriptions found.
+                  </p>
+                )}
+
+              {!loadingDetails &&
+                patientPrescriptions.map((med) => (
+                  <div
+                    key={med.id}
+                    className="border border-white/10 bg-black/20 p-3 rounded-xl text-white text-sm mt-2"
+                  >
+                    <p className="font-semibold">{med.medicine}</p>
+                    <p className="text-white/70 text-xs">
+                      Dosage: {med.dosage}
+                    </p>
+                    <p className="text-white/70 text-xs">
+                      Duration: {med.startDate} → {med.endDate}
+                    </p>
+                    <p className="text-white/70 text-xs">
+                      Times: {(Array.isArray(med.times) ? med.times : []).join(", ")}
+                    </p>
+                  </div>
+                ))}
+            </div>
+          )}
+
         </div>
-      </div>
+      )}
     </div>
   );
 }
-

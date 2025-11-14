@@ -197,7 +197,7 @@ export type Nurse = {
 
 export const nurseDirectory: Nurse[] = [
   {
-    id: "NUR-1001",
+    id: "13",
     name: "Ananya Rao",
     specialty: "Critical Care Nurse",
     city: "Mumbai",
@@ -219,7 +219,7 @@ export const nurseDirectory: Nurse[] = [
     focusTags: ["Ventilator", "Stroke rehab", "Complex cases"],
   },
   {
-    id: "NUR-1002",
+    id: "22",
     name: "Shreya Patel",
     specialty: "Pediatric Nurse",
     city: "Ahmedabad",
@@ -241,7 +241,7 @@ export const nurseDirectory: Nurse[] = [
     focusTags: ["Pediatrics", "Feeding tubes", "Child-friendly"],
   },
   {
-    id: "NUR-1003",
+    id: "14",
     name: "Devika Menon",
     specialty: "Oncology Nurse",
     city: "Bengaluru",
@@ -263,7 +263,7 @@ export const nurseDirectory: Nurse[] = [
     focusTags: ["Oncology", "Infusion", "Symptom tracking"],
   },
   {
-    id: "NUR-1004",
+    id: "15",
     name: "Ritika Sharma",
     specialty: "Geriatric Nurse",
     city: "Delhi",
@@ -289,7 +289,7 @@ export const nurseDirectory: Nurse[] = [
     focusTags: ["Elder care", "Cognitive support", "Mobility"],
   },
   {
-    id: "NUR-1005",
+    id: "16",
     name: "Sahana Victor",
     specialty: "Physiotherapy Nurse",
     city: "Chennai",
@@ -311,7 +311,7 @@ export const nurseDirectory: Nurse[] = [
     focusTags: ["Rehab", "Post-op", "Stroke"],
   },
   {
-    id: "NUR-1006",
+    id: "17",
     name: "Lena Fernandes",
     specialty: "Home ICU Nurse",
     city: "Goa",
