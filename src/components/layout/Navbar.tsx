@@ -30,23 +30,37 @@ export default function Navbar({ initialRole }: { initialRole: string }) {
   const pathname = usePathname();
   const { data: cart = [] } = useCart();
 
-  // Hydrate with initialRole (SSR) → overridden by cookie after mount
   const [role, setRole] = useState(initialRole || "DEFAULT");
 
   useEffect(() => {
-    // Read cookie
     const cookieRole =
       document.cookie
         .split("; ")
         .find((row) => row.startsWith("role="))
         ?.split("=")[1] || null;
 
-    // Read localStorage fallback
     const localRole = localStorage.getItem("role");
 
     if (cookieRole) setRole(cookieRole);
     else if (localRole) setRole(localRole);
   }, []);
+
+  const handleLogout = () => {
+    // Clear localStorage
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("role");
+
+    // Clear cookies
+    document.cookie = "token=; path=/; max-age=0";
+    document.cookie = "role=; path=/; max-age=0";
+
+    // Reset role state
+    setRole("DEFAULT");
+
+    // Redirect
+    window.location.href = "/";
+  };
 
   const links = roleLinks[role] || roleLinks.DEFAULT;
 
@@ -64,7 +78,7 @@ export default function Navbar({ initialRole }: { initialRole: string }) {
 
         {/* Desktop Navbar */}
         <nav className="hidden items-center gap-6 md:flex">
-          {/* Dynamic Role Links */}
+          {/* Dynamic Links */}
           {links.map((item) => {
             const active = pathname.startsWith(item.href);
             return (
@@ -90,7 +104,7 @@ export default function Navbar({ initialRole }: { initialRole: string }) {
             )}
           </Link>
 
-          {/* Sign In OR Role Badge */}
+          {/* Sign In / Role + Logout */}
           {role === "DEFAULT" ? (
             <Link
               href="/login"
@@ -100,13 +114,22 @@ export default function Navbar({ initialRole }: { initialRole: string }) {
               Sign in
             </Link>
           ) : (
-            <span className="text-white/80 text-sm font-semibold uppercase">
-              {role}
-            </span>
+            <div className="flex items-center gap-3">
+              <span className="text-white/80 text-sm font-semibold uppercase">
+                {role}
+              </span>
+
+              <button
+                onClick={handleLogout}
+                className="rounded-full border border-red-400/30 text-red-300 px-3 py-1 text-xs font-semibold hover:bg-red-500/10 transition"
+              >
+                Logout
+              </button>
+            </div>
           )}
         </nav>
 
-        {/* Mobile Menu Icon */}
+        {/* Mobile */}
         <div className="flex items-center gap-3 md:hidden">
           <Link
             href="/cart"
