@@ -29,13 +29,13 @@ export default async function DevicesPage({ searchParams }: Props) {
     <div className="space-y-8">
       <header className="space-y-4">
         <div>
-          <p className="text-xs uppercase tracking-[0.4em] text-gray-500">
+          <p className="text-xs uppercase tracking-[0.4em] text-white">
             Devices
           </p>
           <h1 className="text-3xl font-semibold text-white">
             Medical devices & home ICU hardware
           </h1>
-          <p className="mt-2 text-sm text-gray-400">
+          <p className="mt-2 text-sm text-white">
             Filters pass directly into our logistics engine. Every device ships
             with AI-calibrated maintenance reports.
           </p>
@@ -56,14 +56,14 @@ export default async function DevicesPage({ searchParams }: Props) {
         {hasFilters && (
           <Link
             href="/devices"
-            className="text-xs text-gray-400 underline decoration-dotted underline-offset-4"
+            className="text-xs text-white underline decoration-dotted underline-offset-4"
           >
             Reset filters
           </Link>
         )}
       </div>
 
-      <p className="text-sm text-gray-400">
+      <p className="text-sm text-white">
         Showing {devices.length} device{devices.length === 1 ? "" : "s"}
         {filters.city && ` | ${filters.city}`}
         {filters.category && ` | ${filters.category}`}
@@ -71,7 +71,7 @@ export default async function DevicesPage({ searchParams }: Props) {
       </p>
 
       {devices.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-white/20 p-10 text-center text-gray-400">
+        <div className="rounded-2xl border border-dashed border-white/20 p-10 text-center text-white">
           No devices match the selected filters yet. Try changing the city or price
           preference.
         </div>

@@ -32,7 +32,7 @@ export default function LoginPage() {
           Welcome Back
         </h1>
 
-        <p className="text-center text-gray-400 mt-2">
+        <p className="text-center text-white mt-2">
           Login to continue using MerilCare
         </p>
 
@@ -40,7 +40,7 @@ export default function LoginPage() {
         <form onSubmit={handleLogin} className="mt-8 space-y-6">
           {/* EMAIL */}
           <div>
-            <label className="text-sm text-gray-300">Email</label>
+            <label className="text-sm text-white">Email</label>
             <input
               type="email"
               required
@@ -54,7 +54,7 @@ export default function LoginPage() {
 
           {/* PASSWORD */}
           <div>
-            <label className="text-sm text-gray-300">Password</label>
+            <label className="text-sm text-white">Password</label>
             <input
               type="password"
               required
@@ -70,7 +70,7 @@ export default function LoginPage() {
           <div className="text-right">
             <Link
               href="/forgot-password"
-              className="text-sm text-gray-400 hover:text-pink-400 transition"
+              className="text-sm text-white hover:text-pink-400 transition"
             >
               Forgot password?
             </Link>
@@ -90,7 +90,7 @@ export default function LoginPage() {
 
           {/* ROLE SELECTOR */}
           <div className="mt-10 space-y-4">
-            <p className="text-center text-gray-400 text-sm">Continue as</p>
+            <p className="text-center text-white text-sm">Continue as</p>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <Link
@@ -127,7 +127,7 @@ export default function LoginPage() {
         </form>
 
         {/* CREATE ACCOUNT */}
-        <p className="text-center text-gray-400 mt-8">
+        <p className="text-center text-white mt-8">
           New here?{" "}
           <Link
             href="/signup"

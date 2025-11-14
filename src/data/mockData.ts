@@ -273,7 +273,11 @@ export const nurseDirectory: Nurse[] = [
     hourlyRate: 720,
     bio: "Holistic elder-care nurse focusing on fall prevention, dementia-friendly routines, and vitals monitoring.",
     certifications: ["Fall Prevention", "Dementia Care"],
-    skills: ["Vitals trend tracking", "Mobility therapy", "Medication adherence"],
+    skills: [
+      "Vitals trend tracking",
+      "Mobility therapy",
+      "Medication adherence",
+    ],
     languages: ["Hindi", "English", "Punjabi"],
     photo:
       "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=800&q=60",
@@ -317,7 +321,11 @@ export const nurseDirectory: Nurse[] = [
     hourlyRate: 920,
     bio: "Home ICU setups, invasive ventilator care, and AI-supported documentation for long-term critical cases.",
     certifications: ["ACLS", "Invasive Ventilation", "CRRT"],
-    skills: ["Ventilator titration", "Tracheostomy care", "Medication titration"],
+    skills: [
+      "Ventilator titration",
+      "Tracheostomy care",
+      "Medication titration",
+    ],
     languages: ["English", "Konkani"],
     photo:
       "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=crop&w=800&q=60",
@@ -350,7 +358,8 @@ export const nurseRequests: NurseRequest[] = [
     acuity: "High",
     scheduledFor: "Today | 20:00 - 06:00",
     status: "pending",
-    notes: "Ventilator alarms escalated twice last night. Family requests same nurse.",
+    notes:
+      "Ventilator alarms escalated twice last night. Family requests same nurse.",
   },
   {
     id: "REQ-2109",
@@ -389,7 +398,7 @@ export const aiVerificationQueue: AIVerificationTask[] = [
     id: "AI-881",
     patient: "Baby Anvi",
     type: "Medication",
-    requirement: "Confirm Amikacin 50mg / 2ml vial before dilution.",
+    requirement: "Amikacin 50mg / 2ml vial",
     reference: "Prescription uploaded | 10:12 AM",
     status: "pending",
     confidence: 0.0,
@@ -398,10 +407,37 @@ export const aiVerificationQueue: AIVerificationTask[] = [
     id: "AI-882",
     patient: "Mr. Iyer",
     type: "Injection",
-    requirement: "Verify insulin syringe (U-40) before 22:00 shot.",
+    requirement: "insulin syringe (U-40)",
     reference: "Vitals log indicates hypo incident yesterday.",
     status: "pending",
     confidence: 0.0,
   },
-];
 
+  {
+    id: "AI-883",
+    patient: "Mrs. D'Souza",
+    type: "Medication",
+    requirement: "Ondansetron 4mg",
+    reference: "Linked with chemo infusion order | 2:14 PM",
+    status: "pending",
+    confidence: 0.0,
+  },
+  {
+    id: "AI-884",
+    patient: "Mr. Khan",
+    type: "Device setup",
+    requirement: "BIPAP ST mode setup @ 12 cmH₂O / 6 cmH₂O",
+    reference: "Sleep study report uploaded",
+    status: "pending",
+    confidence: 0.0,
+  },
+  {
+    id: "AI-885",
+    patient: "Baby Aarav",
+    type: "Medication",
+    requirement: "Paracetamol 120mg/5ml — 5ml",
+    reference: "Fever spikes logged in vitals chart",
+    status: "pending",
+    confidence: 0.0,
+  },
+];

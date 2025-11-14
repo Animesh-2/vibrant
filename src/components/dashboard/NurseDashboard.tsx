@@ -49,9 +49,9 @@ export default function NurseDashboard({ summary, requests }: Props) {
         ].map((item) => (
           <div
             key={item.label}
-            className="rounded-3xl border border-white/10 bg-white/5 p-5 text-sm text-gray-300"
+            className="rounded-3xl border border-white/10 bg-white/5 p-5 text-sm text-white"
           >
-            <p className="text-xs uppercase tracking-[0.3em] text-gray-500">
+            <p className="text-xs uppercase tracking-[0.3em] text-white">
               {item.label}
             </p>
             <p className="mt-2 text-3xl font-semibold text-white">{item.value}</p>
@@ -66,7 +66,7 @@ export default function NurseDashboard({ summary, requests }: Props) {
               <h2 className="text-lg font-semibold text-white">
                 Availability management
               </h2>
-              <p className="text-xs uppercase tracking-[0.3em] text-gray-500">
+              <p className="text-xs uppercase tracking-[0.3em] text-white">
                 Sync with families
               </p>
             </div>
@@ -77,7 +77,7 @@ export default function NurseDashboard({ summary, requests }: Props) {
           <div className="space-y-4">
             {availability.map((record) => (
               <div key={record.day}>
-                <p className="text-sm text-gray-400">{record.day}</p>
+                <p className="text-sm text-white">{record.day}</p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {record.slots.map((slot) => (
                     <button
@@ -90,7 +90,7 @@ export default function NurseDashboard({ summary, requests }: Props) {
                   ))}
                   <button
                     onClick={() => toggleSlot(record.day, "On call")}
-                    className="rounded-full border border-dashed border-white/15 px-3 py-1 text-xs text-gray-400"
+                    className="rounded-full border border-dashed border-white/15 px-3 py-1 text-xs text-white"
                   >
                     + slot
                   </button>
@@ -106,7 +106,7 @@ export default function NurseDashboard({ summary, requests }: Props) {
               <h2 className="text-lg font-semibold text-white">
                 Request approvals
               </h2>
-              <p className="text-xs uppercase tracking-[0.3em] text-gray-500">
+              <p className="text-xs uppercase tracking-[0.3em] text-white">
                 Pending ({requests.length})
               </p>
             </div>
@@ -121,16 +121,16 @@ export default function NurseDashboard({ summary, requests }: Props) {
                   className={`w-full rounded-2xl border px-4 py-3 text-left text-sm transition ${
                     active
                       ? "border-transparent bg-gradient-to-r from-pink-500/20 to-violet-500/20 text-white"
-                      : "border-white/10 text-gray-300 hover:border-white/30"
+                      : "border-white/10 text-white hover:border-white/30"
                   }`}
                 >
-                  <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-gray-500">
+                  <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-white">
                     <span>{request.patient}</span>
                     <span>{request.acuity}</span>
                   </div>
                   <p className="mt-1 text-base text-white">{request.procedure}</p>
-                  <p className="text-xs text-gray-400">{request.location}</p>
-                  <p className="mt-1 text-xs text-gray-500">
+                  <p className="text-xs text-white">{request.location}</p>
+                  <p className="mt-1 text-xs text-white">
                     {request.scheduledFor}
                   </p>
                 </button>
@@ -138,7 +138,7 @@ export default function NurseDashboard({ summary, requests }: Props) {
             })}
           </div>
           {selectedRequest && (
-            <div className="rounded-2xl border border-white/10 bg-black/30 p-4 text-xs text-gray-300">
+            <div className="rounded-2xl border border-white/10 bg-black/30 p-4 text-xs text-white">
               Request {selectedRequest} pre-approved. AI verification checklist will
               be generated once you confirm.
             </div>

@@ -10,7 +10,7 @@ export default function NurseCard({ nurse }: Props) {
   return (
     <Link
       href={`/caregivers/${nurse.id}`}
-      className="group flex flex-col rounded-2xl border border-white/10 bg-gradient-to-b from-white/10 to-black/40 p-4 text-sm text-gray-300 transition hover:-translate-y-1 hover:border-pink-400/60"
+      className="group flex flex-col rounded-2xl border border-white/10 bg-gradient-to-b from-white/10 to-black/40 p-4 text-sm text-white transition hover:-translate-y-1 hover:border-pink-400/60"
     >
       <div className="flex items-center gap-4">
         <img
@@ -25,13 +25,13 @@ export default function NurseCard({ nurse }: Props) {
               {nurse.specialty}
             </span>
           </div>
-          <p className="mt-1 flex items-center gap-2 text-xs text-gray-400">
+          <p className="mt-1 flex items-center gap-2 text-xs text-white">
             <MapPin size={14} /> {nurse.city}
           </p>
         </div>
       </div>
 
-      <div className="mt-4 flex items-center justify-between text-xs uppercase tracking-wider text-gray-400">
+      <div className="mt-4 flex items-center justify-between text-xs uppercase tracking-wider text-white">
         <span className="flex items-center gap-1 text-white">
           <Star className="h-3 w-3 text-yellow-300" /> {nurse.rating.toFixed(2)}
         </span>
@@ -39,7 +39,7 @@ export default function NurseCard({ nurse }: Props) {
         <span>₹{nurse.hourlyRate}/hr</span>
       </div>
 
-      <p className="mt-3 text-sm text-gray-300">
+      <p className="mt-3 text-sm text-white">
         {nurse.bio.length > 110 ? `${nurse.bio.slice(0, 107)}...` : nurse.bio}
       </p>
 
@@ -56,7 +56,7 @@ export default function NurseCard({ nurse }: Props) {
 
       <div className="mt-5 flex items-center justify-between text-xs text-white">
         <div>
-          <p className="text-[11px] uppercase tracking-wide text-gray-400">
+          <p className="text-[11px] uppercase tracking-wide text-white">
             Next slot
           </p>
           <p>{nurse.availability[0]?.slots[0] ?? "On request"}</p>

@@ -33,7 +33,7 @@ export default function CartPage() {
     return (
       <div className="mx-auto flex max-w-3xl flex-col items-center gap-6 px-4 py-20 text-center">
         <h1 className="text-3xl font-semibold text-white">Your cart is empty</h1>
-        <p className="text-sm text-gray-400">
+        <p className="text-sm text-white">
           Add medical devices and caregiver shifts to align delivery and staffing.
         </p>
         <div className="flex flex-wrap justify-center gap-4">
@@ -58,13 +58,13 @@ export default function CartPage() {
     <div className="mx-auto grid max-w-5xl gap-8 px-4 py-16 lg:grid-cols-[2fr,1fr]">
       <div className="space-y-6">
         <header>
-          <p className="text-xs uppercase tracking-[0.4em] text-gray-500">
+          <p className="text-xs uppercase tracking-[0.4em] text-white">
             Unified cart
           </p>
           <h1 className="text-3xl font-semibold text-white">
             Devices & caregiver shifts
           </h1>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-white">
             Once you check out, VIBRANT syncs delivery slots with nurse schedules and
             sends AI verification steps automatically.
           </p>
@@ -73,7 +73,7 @@ export default function CartPage() {
         {cart.map((item) => (
           <div
             key={item.id}
-            className="flex flex-col gap-4 rounded-3xl border border-white/10 bg-white/5 p-5 text-sm text-gray-300 sm:flex-row sm:items-center"
+            className="flex flex-col gap-4 rounded-3xl border border-white/10 bg-white/5 p-5 text-sm text-white sm:flex-row sm:items-center"
           >
             <img
               src={item.image}
@@ -84,7 +84,7 @@ export default function CartPage() {
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <h2 className="text-lg font-semibold text-white">{item.name}</h2>
-                  <p className="text-xs uppercase tracking-[0.3em] text-gray-500">
+                  <p className="text-xs uppercase tracking-[0.3em] text-white">
                     ₹{item.pricePerDay} / day
                   </p>
                 </div>
@@ -135,7 +135,7 @@ export default function CartPage() {
         ))}
 
         <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
-          <label className="text-xs uppercase tracking-[0.3em] text-gray-500">
+          <label className="text-xs uppercase tracking-[0.3em] text-white">
             Delivery note
             <textarea
               value={note}
@@ -149,7 +149,7 @@ export default function CartPage() {
       <aside className="space-y-6 rounded-3xl border border-white/10 bg-white/5 p-6">
         <h2 className="text-lg font-semibold text-white">Checkout summary</h2>
 
-        <div className="space-y-2 text-sm text-gray-300">
+        <div className="space-y-2 text-sm text-white">
           <Row label="Subtotal" value={`₹${subtotal}`} />
           <Row label="Refundable deposit" value={`₹${deposit}`} />
           <Row label="AI verification fee" value="₹0" />
@@ -158,7 +158,7 @@ export default function CartPage() {
         </div>
 
         <div className="space-y-3">
-          <p className="text-xs uppercase tracking-[0.3em] text-gray-500">
+          <p className="text-xs uppercase tracking-[0.3em] text-white">
             Payment method
           </p>
           <div className="space-y-2">
@@ -169,7 +169,7 @@ export default function CartPage() {
                 className={`w-full rounded-2xl border px-4 py-3 text-left text-sm font-semibold transition ${
                   paymentMethod === option.value
                     ? "border-transparent bg-gradient-to-r from-pink-500/70 to-violet-500/70 text-white"
-                    : "border-white/15 text-gray-300 hover:border-white/40"
+                    : "border-white/15 text-white hover:border-white/40"
                 }`}
               >
                 {option.label}
@@ -182,7 +182,7 @@ export default function CartPage() {
           Confirm schedule & pay
         </button>
 
-        <div className="rounded-2xl border border-dashed border-white/20 bg-black/30 p-4 text-xs text-gray-400">
+        <div className="rounded-2xl border border-dashed border-white/20 bg-black/30 p-4 text-xs text-white">
           Nurses will receive AI verification steps right after checkout. Cart
           merges into a single itinerary for the family.
         </div>

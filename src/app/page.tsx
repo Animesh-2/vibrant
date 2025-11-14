@@ -80,14 +80,14 @@ export default async function HomePage() {
           </div>
 
           <div className="rounded-3xl border border-white/15 bg-black/30 p-4">
-            <p className="text-xs uppercase tracking-[0.4em] text-gray-400">
+            <p className="text-xs uppercase tracking-[0.4em] text-white">
               Instant search
             </p>
             <SearchBar />
-            <div className="mt-6 space-y-3 text-xs text-gray-400">
+            <div className="mt-6 space-y-3 text-xs text-white">
               <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white">
                 <span>Cart & checkout</span>
-                <span className="text-xs text-gray-400">Devices + nurses</span>
+                <span className="text-xs text-white">Devices + nurses</span>
               </div>
               <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
                 <span>AI verification</span>
@@ -101,7 +101,7 @@ export default async function HomePage() {
       <section className="space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p className="text-xs uppercase tracking-[0.4em] text-gray-400">
+            <p className="text-xs uppercase tracking-[0.4em] text-white">
               Device marketplace
             </p>
             <h2 className="mt-2 text-2xl font-semibold text-white">
@@ -125,7 +125,7 @@ export default async function HomePage() {
       <section className="space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p className="text-xs uppercase tracking-[0.4em] text-gray-400">
+            <p className="text-xs uppercase tracking-[0.4em] text-white">
               Care team
             </p>
             <h2 className="mt-2 text-2xl font-semibold text-white">
@@ -153,7 +153,7 @@ export default async function HomePage() {
             className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/10 to-black/40 p-6"
           >
             <h3 className="text-lg font-semibold text-white">{pillar.title}</h3>
-            <p className="mt-3 text-sm text-gray-300">{pillar.description}</p>
+            <p className="mt-3 text-sm text-white">{pillar.description}</p>
             <div className="mt-4 h-px w-12 bg-gradient-to-r from-pink-500 to-transparent" />
             <p className="mt-3 text-xs uppercase tracking-[0.3em] text-pink-200">
               End-to-end visibility

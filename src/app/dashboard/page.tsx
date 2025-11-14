@@ -12,13 +12,13 @@ export default async function DashboardPage() {
     <div className="space-y-8">
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <p className="text-xs uppercase tracking-[0.4em] text-gray-500">
+          <p className="text-xs uppercase tracking-[0.4em] text-white">
             Nurse cockpit
           </p>
           <h1 className="text-3xl font-semibold text-white">
             Availability & approvals dashboard
           </h1>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-white">
             Keep shifts, logistics, and AI verification steps in sync. Slots that you
             confirm here reflect in patient carts immediately.
           </p>

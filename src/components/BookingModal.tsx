@@ -54,7 +54,7 @@ export default function BookingModal({ deviceId, pricePerDay }: Props) {
           <div className="w-full max-w-lg rounded-3xl border border-white/10 bg-[#05080f] p-6">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-xs uppercase tracking-[0.4em] text-gray-500">
+                <p className="text-xs uppercase tracking-[0.4em] text-white">
                   Reservation
                 </p>
                 <h3 className="text-2xl font-semibold text-white">
@@ -66,7 +66,7 @@ export default function BookingModal({ deviceId, pricePerDay }: Props) {
                   setOpen(false);
                   setMessage(null);
                 }}
-                className="text-sm text-gray-400 hover:text-white"
+                className="text-sm text-white hover:text-white"
               >
                 Close
               </button>
@@ -89,13 +89,13 @@ export default function BookingModal({ deviceId, pricePerDay }: Props) {
               <div className="rounded-2xl border border-white/10 bg-black/30 p-4 text-white">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs uppercase tracking-[0.3em] text-gray-500">
+                    <p className="text-xs uppercase tracking-[0.3em] text-white">
                       Estimated charge
                     </p>
                     <p className="text-2xl font-semibold">₹{estimatedCost}</p>
-                    <p className="text-xs text-gray-400">₹{pricePerDay}/day</p>
+                    <p className="text-xs text-white">₹{pricePerDay}/day</p>
                   </div>
-                  <div className="text-right text-xs text-gray-400">
+                  <div className="text-right text-xs text-white">
                     Includes doorstep QC, installation, and pickup.
                   </div>
                 </div>
@@ -137,7 +137,7 @@ function Field({
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }) {
   return (
-    <label className="text-xs uppercase tracking-[0.3em] text-gray-400">
+    <label className="text-xs uppercase tracking-[0.3em] text-white">
       {label}
       <input
         required

@@ -17,7 +17,7 @@ export default async function NurseProfilePage({ params }: Props) {
     <div className="space-y-8">
       <Link
         href="/caregivers"
-        className="flex items-center gap-2 text-sm text-gray-400 hover:text-white"
+        className="flex items-center gap-2 text-sm text-white hover:text-white"
       >
         <ArrowLeft size={16} /> Back to nurse directory
       </Link>
@@ -33,7 +33,7 @@ export default async function NurseProfilePage({ params }: Props) {
             <div className="space-y-2">
               <h1 className="text-3xl font-semibold text-white">{nurse.name}</h1>
               <p className="text-sm text-pink-200">{nurse.specialty}</p>
-              <p className="flex items-center gap-2 text-sm text-gray-400">
+              <p className="flex items-center gap-2 text-sm text-white">
                 <MapPin size={14} /> {nurse.city} | {nurse.experience} yrs exp
               </p>
               <div className="flex flex-wrap items-center gap-3 text-xs">
@@ -50,7 +50,7 @@ export default async function NurseProfilePage({ params }: Props) {
             </div>
           </div>
 
-          <section className="space-y-4 text-sm text-gray-300">
+          <section className="space-y-4 text-sm text-white">
             <p>{nurse.bio}</p>
             <div className="grid gap-3 sm:grid-cols-2">
               <InfoCard
@@ -67,7 +67,7 @@ export default async function NurseProfilePage({ params }: Props) {
           </section>
 
           <section className="space-y-3">
-            <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-gray-400">
+            <h2 className="text-sm font-semibold uppercase tracking-[0.3em] text-white">
               Focus areas
             </h2>
             <div className="flex flex-wrap gap-2">
@@ -85,7 +85,7 @@ export default async function NurseProfilePage({ params }: Props) {
 
         <div className="space-y-6">
           <NurseSlotPicker nurse={nurse} />
-          <div className="rounded-3xl border border-dashed border-white/20 bg-black/30 p-4 text-xs text-gray-400">
+          <div className="rounded-3xl border border-dashed border-white/20 bg-black/30 p-4 text-xs text-white">
             Uploads from this nurse route to the AI verification flow before medication
             administration. Track status inside the dashboard.
           </div>
@@ -106,7 +106,7 @@ function InfoCard({
 }) {
   return (
     <div className="rounded-2xl border border-white/10 bg-black/30 p-4 text-sm text-gray-200">
-      <div className="flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-gray-500">
+      <div className="flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-white">
         {icon}
         {title}
       </div>

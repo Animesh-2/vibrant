@@ -14,13 +14,13 @@ export default function NurseSlotPicker({ nurse }: Props) {
   return (
     <div className="space-y-4 rounded-3xl border border-white/10 bg-white/5 p-5">
       <h3 className="text-lg font-semibold text-white">Select a slot</h3>
-      <p className="text-xs uppercase tracking-[0.3em] text-gray-400">
+      <p className="text-xs uppercase tracking-[0.3em] text-white">
         Live availability
       </p>
       <div className="space-y-3">
         {nurse.availability.map((block) => (
           <div key={block.day}>
-            <p className="text-sm text-gray-400">{block.day}</p>
+            <p className="text-sm text-white">{block.day}</p>
             <div className="mt-2 flex flex-wrap gap-2">
               {block.slots.map((slot) => {
                 const key = `${block.day}-${slot}`;
@@ -35,7 +35,7 @@ export default function NurseSlotPicker({ nurse }: Props) {
                     className={`rounded-full border px-3 py-1 text-xs transition ${
                       active
                         ? "border-transparent bg-gradient-to-r from-pink-500 to-violet-500 text-white"
-                        : "border-white/15 text-gray-300 hover:border-white/40"
+                        : "border-white/15 text-white hover:border-white/40"
                     }`}
                   >
                     {slot}
@@ -59,7 +59,7 @@ export default function NurseSlotPicker({ nurse }: Props) {
       </button>
 
       {message && (
-        <div className="rounded-2xl border border-white/10 bg-black/30 p-3 text-xs text-gray-300">
+        <div className="rounded-2xl border border-white/10 bg-black/30 p-3 text-xs text-white">
           {message}
         </div>
       )}

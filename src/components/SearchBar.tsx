@@ -1,32 +1,32 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const cityOptions = [
-  'All cities',
-  'Mumbai',
-  'Delhi',
-  'Bengaluru',
-  'Hyderabad',
-  'Chennai',
+  "All cities",
+  "Mumbai",
+  "Delhi",
+  "Bengaluru",
+  "Hyderabad",
+  "Chennai",
 ];
 
 const categoryOptions = [
-  { label: 'All devices', value: '' },
-  { label: 'Respiratory', value: 'Respiratory' },
-  { label: 'Monitoring', value: 'Monitoring' },
-  { label: 'Infusion', value: 'Infusion' },
-  { label: 'Diagnostics', value: 'Diagnostics' },
-  { label: 'Patient Care', value: 'Patient Care' },
+  { label: "All devices", value: "" },
+  { label: "Respiratory", value: "Respiratory" },
+  { label: "Monitoring", value: "Monitoring" },
+  { label: "Infusion", value: "Infusion" },
+  { label: "Diagnostics", value: "Diagnostics" },
+  { label: "Patient Care", value: "Patient Care" },
 ];
 
 export default function SearchBar() {
   const router = useRouter();
-  const [city, setCity] = useState('');
-  const [category, setCategory] = useState('');
-  const [query, setQuery] = useState('');
-  const [price, setPrice] = useState<'budget' | 'premium' | ''>('');
+  const [city, setCity] = useState("");
+  const [category, setCategory] = useState("");
+  const [query, setQuery] = useState("");
+  const [price, setPrice] = useState<"budget" | "premium" | "">("");
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -46,7 +46,7 @@ export default function SearchBar() {
       className="grid gap-4 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm md:grid-cols-5"
     >
       <div>
-        <label className="text-xs uppercase tracking-[0.2em] text-gray-400">
+        <label className="text-xs uppercase tracking-[0.2em] text-white">
           City
         </label>
         <select
@@ -57,7 +57,7 @@ export default function SearchBar() {
           {cityOptions.map((option) => (
             <option
               className="bg-[#05080f]"
-              value={option === 'All cities' ? '' : option}
+              value={option === "All cities" ? "" : option}
               key={option}
             >
               {option}
@@ -67,7 +67,7 @@ export default function SearchBar() {
       </div>
 
       <div>
-        <label className="text-xs uppercase tracking-[0.2em] text-gray-400">
+        <label className="text-xs uppercase tracking-[0.2em] text-white">
           Device
         </label>
         <select
@@ -88,42 +88,50 @@ export default function SearchBar() {
       </div>
 
       <div>
-        <label className="text-xs uppercase tracking-[0.2em] text-gray-400">
+        <label className="text-xs uppercase tracking-[0.2em] text-white">
           Keyword
         </label>
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Ventilator, monitor..."
-          className="mt-1 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-white placeholder:text-gray-500 focus:border-pink-400 focus:outline-none"
+          className="mt-1 w-full rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-white placeholder:text-white focus:border-pink-400 focus:outline-none"
         />
       </div>
 
       <div>
-        <label className="text-xs uppercase tracking-[0.2em] text-gray-400">
+        <label className="text-xs uppercase tracking-[0.2em] text-white">
           Pricing
         </label>
         <div className="mt-1 grid grid-cols-2 gap-2">
           {[
             { label: "Budget < ₹1k", value: "budget" },
-            { label: "Premium", value: "premium" },
+            { label: "Premium devices for ICU rentals", value: "premium" },
           ].map((option) => (
-            <button
-              type="button"
-              key={option.value}
-              onClick={() =>
-                setPrice((prev) =>
-                  prev === option.value ? '' : (option.value as 'budget' | 'premium')
-                )
-              }
-              className={`rounded-xl border px-2 py-2 text-xs font-semibold transition ${
-                price === option.value
-                  ? 'border-transparent bg-gradient-to-r from-pink-500 to-violet-500 text-white'
-                  : 'border-white/15 bg-black/20 text-gray-300 hover:border-white/40'
-              }`}
-            >
-              {option.label}
-            </button>
+            <div key={option.value} className="relative group">
+              <button
+                type="button"
+                onClick={() =>
+                  setPrice((prev) =>
+                    prev === option.value
+                      ? ""
+                      : (option.value as "budget" | "premium")
+                  )
+                }
+                className={`w-full rounded-xl border px-2 py-2 text-xs font-semibold transition whitespace-nowrap overflow-hidden text-ellipsis ${
+                  price === option.value
+                    ? "border-transparent bg-gradient-to-r from-pink-500 to-violet-500 text-white"
+                    : "border-white/15 bg-black/20 text-white hover:border-white/40"
+                }`}
+              >
+                {option.label}
+              </button>
+
+              {/* Tooltip on hover */}
+              <span className="pointer-events-none absolute left-1/2 top-full z-30 hidden -translate-x-1/2 mt-1 w-max max-w-xs rounded-lg bg-black/90 px-3 py-2 text-xs text-white shadow-lg group-hover:block">
+                {option.label}
+              </span>
+            </div>
           ))}
         </div>
       </div>
@@ -138,13 +146,13 @@ export default function SearchBar() {
         <button
           type="button"
           onClick={() => {
-            setCity('');
-            setCategory('');
-            setQuery('');
-            setPrice('');
-            router.push('/devices');
+            setCity("");
+            setCategory("");
+            setQuery("");
+            setPrice("");
+            router.push("/devices");
           }}
-          className="text-xs text-gray-400 underline decoration-dotted underline-offset-4 hover:text-white"
+          className="text-xs text-white underline decoration-dotted underline-offset-4 hover:text-white"
         >
           Clear filters
         </button>
@@ -152,4 +160,3 @@ export default function SearchBar() {
     </form>
   );
 }
-

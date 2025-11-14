@@ -9,13 +9,13 @@ export default async function VerificationPage() {
     <div className="space-y-8">
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <p className="text-xs uppercase tracking-[0.4em] text-gray-500">
+          <p className="text-xs uppercase tracking-[0.4em] text-white">
             AI verification
           </p>
           <h1 className="text-3xl font-semibold text-white">
             Upload evidence before procedures
           </h1>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-white">
             Each upload is scanned for labels, dosage, and expiry before you can proceed
             with medicine administration.
           </p>

@@ -32,7 +32,7 @@ export default function SignupPage() {
           Create Account
         </h1>
 
-        <p className="text-center text-gray-400 mt-1 text-sm">
+        <p className="text-center text-white mt-1 text-sm">
           Sign up to start using MerilCare
         </p>
 
@@ -41,7 +41,7 @@ export default function SignupPage() {
           {/* FULL NAME */}
           {/* FULL NAME - FULL WIDTH */}
           <div className="col-span-2">
-            <label className="text-sm text-gray-300">Full Name</label>
+            <label className="text-sm text-white">Full Name</label>
             <input
               type="text"
               required
@@ -54,7 +54,7 @@ export default function SignupPage() {
 
           {/* EMAIL - LEFT */}
           <div className="col-span-1">
-            <label className="text-sm text-gray-300">Email</label>
+            <label className="text-sm text-white">Email</label>
             <input
               type="email"
               required
@@ -67,7 +67,7 @@ export default function SignupPage() {
 
           {/* PHONE - RIGHT */}
           <div className="col-span-1">
-            <label className="text-sm text-gray-300">Phone Number</label>
+            <label className="text-sm text-white">Phone Number</label>
             <input
               type="tel"
               required
@@ -81,7 +81,7 @@ export default function SignupPage() {
 
           {/* PASSWORD - LEFT */}
           <div className="col-span-1">
-            <label className="text-sm text-gray-300">Password</label>
+            <label className="text-sm text-white">Password</label>
             <input
               type="password"
               required
@@ -94,7 +94,7 @@ export default function SignupPage() {
 
           {/* CONFIRM PASSWORD - RIGHT */}
           <div className="col-span-1">
-            <label className="text-sm text-gray-300">Confirm Password</label>
+            <label className="text-sm text-white">Confirm Password</label>
             <input
               type="password"
               required
@@ -119,7 +119,7 @@ export default function SignupPage() {
 
           {/* ROLE SELECTOR */}
           <div className="col-span-2 mt-4 space-y-2">
-            <p className="text-center text-gray-400 text-sm">Register as</p>
+            <p className="text-center text-white text-sm">Register as</p>
 
             <div className="grid grid-cols-3 gap-3">
               <Link
@@ -156,7 +156,7 @@ export default function SignupPage() {
         </form>
 
         {/* ALREADY HAVE ACCOUNT */}
-        <p className="text-center text-gray-400 mt-6 text-sm">
+        <p className="text-center text-white mt-6 text-sm">
           Already have an account?{" "}
           <Link
             href="/login"

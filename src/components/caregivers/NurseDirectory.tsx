@@ -42,7 +42,7 @@ export default function NurseDirectory({ nurses }: Props) {
     <div className="space-y-6">
       <div className="grid gap-4 rounded-3xl border border-white/10 bg-white/5 p-4 md:grid-cols-4">
         <div className="md:col-span-2">
-          <label className="text-xs uppercase tracking-[0.3em] text-gray-400">
+          <label className="text-xs uppercase tracking-[0.3em] text-white">
             Search
             <input
               value={query}
@@ -65,7 +65,7 @@ export default function NurseDirectory({ nurses }: Props) {
           onChange={setSpecialty}
         />
         <div>
-          <label className="text-xs uppercase tracking-[0.3em] text-gray-400">
+          <label className="text-xs uppercase tracking-[0.3em] text-white">
             Min rating {minRating.toFixed(1)}★
             <input
               type="range"
@@ -80,7 +80,7 @@ export default function NurseDirectory({ nurses }: Props) {
         </div>
       </div>
 
-      <p className="text-sm text-gray-400">
+      <p className="text-sm text-white">
         Showing {filtered.length} nurse{filtered.length === 1 ? "" : "s"} with AI
         verification enabled.
       </p>
@@ -106,7 +106,7 @@ function FilterSelect({
   onChange: (value: string) => void;
 }) {
   return (
-    <label className="text-xs uppercase tracking-[0.3em] text-gray-400">
+    <label className="text-xs uppercase tracking-[0.3em] text-white">
       {label}
       <select
         value={value}

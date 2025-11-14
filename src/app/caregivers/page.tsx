@@ -9,13 +9,13 @@ export default async function CaregiversPage() {
     <div className="space-y-8">
       <header className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <p className="text-xs uppercase tracking-[0.4em] text-gray-500">
+          <p className="text-xs uppercase tracking-[0.4em] text-white">
             Care team marketplace
           </p>
           <h1 className="text-3xl font-semibold text-white">
             Hire verified nurses & caregivers
           </h1>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-white">
             Filter by city, specialty, hourly rate, and AI verification readiness. Every
             nurse shown below has completed KYC, background checks, and skills assessments.
           </p>

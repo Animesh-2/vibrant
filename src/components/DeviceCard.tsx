@@ -41,13 +41,13 @@ export default function DeviceCard({ device }: Props) {
             <h3 className="text-lg font-semibold text-white">{device.name}</h3>
             <ArrowUpRight
               size={16}
-              className="text-gray-400 transition group-hover:text-white"
+              className="text-white transition group-hover:text-white"
             />
           </div>
-          <p className="text-sm text-gray-400">{device.description}</p>
+          <p className="text-sm text-white">{device.description}</p>
         </div>
 
-        <div className="flex flex-wrap gap-2 text-xs text-gray-300">
+        <div className="flex flex-wrap gap-2 text-xs text-white">
           {device.tags.slice(0, 3).map((tag) => (
             <span
               key={tag}
@@ -60,10 +60,10 @@ export default function DeviceCard({ device }: Props) {
 
         <div className="flex items-center justify-between pt-2">
           <div>
-            <p className="text-xs text-gray-400">{device.city}</p>
+            <p className="text-xs text-white">{device.city}</p>
             <p className="text-xl font-semibold text-white">
               ₹{device.pricePerDay}
-              <span className="text-sm text-gray-400"> / day</span>
+              <span className="text-sm text-white"> / day</span>
             </p>
           </div>
           <span className="rounded-full bg-gradient-to-r from-pink-500 to-violet-500 px-3 py-1 text-xs font-semibold text-white">

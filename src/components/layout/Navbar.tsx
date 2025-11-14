@@ -9,7 +9,7 @@ const links = [
   { href: "/devices", label: "Devices" },
   { href: "/caregivers", label: "Nurses" },
   { href: "/dashboard", label: "Nurse Dashboard" },
-  { href: "/dashboard/verification", label: "AI Verify" },
+  { href: "/dashboard/verification", label: "Medcheck" },
 ];
 
 export default function Navbar() {
@@ -34,7 +34,7 @@ export default function Navbar() {
                 key={item.href}
                 href={item.href}
                 className={`text-sm font-medium transition ${
-                  active ? "text-white" : "text-gray-400 hover:text-white"
+                  active ? "text-white" : "text-white hover:text-white"
                 }`}
               >
                 {item.label}
@@ -45,7 +45,7 @@ export default function Navbar() {
           <Link href="/cart" className="relative">
             <ShoppingCart
               size={22}
-              className="text-gray-300 transition hover:text-white"
+              className="text-white transition hover:text-white"
             />
             {cart.length > 0 && (
               <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-pink-500 text-[11px] font-semibold text-white">
