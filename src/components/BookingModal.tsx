@@ -1,71 +1,166 @@
-'use client'
-import React, { useState } from 'react'
-import { bookDevice } from '../lib/api'
+'use client';
 
-export default function BookingModal({ deviceId, pricePerDay }: { deviceId: string; pricePerDay: number }) {
-  const [open, setOpen] = useState(false)
-  const [start, setStart] = useState('')
-  const [end, setEnd] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState<string | null>(null)
+import { type ChangeEvent, useState } from 'react';
+import { bookDevice } from '@/lib/api';
 
-  async function handleBook(e: React.FormEvent) {
-    e.preventDefault()
-    setLoading(true)
-    setMessage(null)
+type Props = {
+  deviceId: string;
+  pricePerDay: number;
+};
+
+export default function BookingModal({ deviceId, pricePerDay }: Props) {
+  const [open, setOpen] = useState(false);
+  const [start, setStart] = useState('');
+  const [end, setEnd] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+  const [bookingCode, setBookingCode] = useState<string | null>(null);
+
+  async function handleBook(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setLoading(true);
+    setMessage(null);
     try {
-      // user_id hardcoded for now — replace with auth user id
-      const res: any = await bookDevice(deviceId, { user_id: 'u_demo', start, end })
-      setMessage(`Booked! id: ${res.bookingId}`)
-    } catch (err) {
-      setMessage('Failed to book — try again.')
+      const response = await bookDevice(deviceId, {
+        user_id: 'nurse-demo',
+        start,
+        end,
+      });
+      setBookingCode(response.bookingId);
+      setMessage(
+        `Slot blocked for ${response.totalDays} day(s). Ops team will confirm shortly.`
+      );
+    } catch {
+      setMessage('Booking failed. Please retry or contact concierge.');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
+  const estimatedCost =
+    start && end ? calcTotal(start, end, pricePerDay) : pricePerDay;
+
   return (
     <>
-      <button onClick={() => setOpen(true)} className="w-full px-3 py-2 bg-white text-black rounded">Reserve</button>
+      <button
+        onClick={() => setOpen(true)}
+        className="w-full rounded-2xl bg-gradient-to-r from-pink-500 to-violet-500 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-pink-500/20 transition hover:shadow-pink-500/40"
+      >
+        Reserve this device
+      </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-          <div className="bg-[#0f1720] p-6 rounded w-full max-w-md">
-            <h3 className="text-lg font-semibold">Reserve device</h3>
-            <form onSubmit={handleBook} className="mt-4 space-y-3">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
+          <div className="w-full max-w-lg rounded-3xl border border-white/10 bg-[#05080f] p-6">
+            <div className="flex items-start justify-between">
               <div>
-                <label className="text-sm text-gray-400">Start</label>
-                <input type="date" value={start} onChange={e=>setStart(e.target.value)} required className="w-full p-2 rounded bg-gray-900 border border-gray-800" />
+                <p className="text-xs uppercase tracking-[0.4em] text-gray-500">
+                  Reservation
+                </p>
+                <h3 className="text-2xl font-semibold text-white">
+                  Schedule delivery
+                </h3>
               </div>
-              <div>
-                <label className="text-sm text-gray-400">End</label>
-                <input type="date" value={end} onChange={e=>setEnd(e.target.value)} required className="w-full p-2 rounded bg-gray-900 border border-gray-800" />
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  setMessage(null);
+                }}
+                className="text-sm text-gray-400 hover:text-white"
+              >
+                Close
+              </button>
+            </div>
+
+            <form onSubmit={handleBook} className="mt-6 space-y-4 text-sm">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field
+                  label="Start date"
+                  value={start}
+                  onChange={(e) => setStart(e.target.value)}
+                />
+                <Field
+                  label="End date"
+                  value={end}
+                  onChange={(e) => setEnd(e.target.value)}
+                />
               </div>
 
-              <div className="flex items-center justify-between">
-                <div className="text-sm text-gray-400">Est total: {start && end ? `₹${calcTotal(start, end, pricePerDay)}` : '—'}</div>
-                <div className="flex gap-2">
-                  <button type="button" onClick={()=>setOpen(false)} className="px-3 py-1 rounded border border-gray-700">Close</button>
-                  <button type="submit" disabled={loading} className="px-3 py-1 bg-white text-black rounded">Confirm</button>
+              <div className="rounded-2xl border border-white/10 bg-black/30 p-4 text-white">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.3em] text-gray-500">
+                      Estimated charge
+                    </p>
+                    <p className="text-2xl font-semibold">₹{estimatedCost}</p>
+                    <p className="text-xs text-gray-400">₹{pricePerDay}/day</p>
+                  </div>
+                  <div className="text-right text-xs text-gray-400">
+                    Includes doorstep QC, installation, and pickup.
+                  </div>
                 </div>
               </div>
 
-              {message && <div className="text-sm text-gray-300 mt-2">{message}</div>}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full rounded-2xl bg-white/90 px-4 py-3 font-semibold text-black transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                {loading ? 'Blocking slot...' : 'Confirm reservation'}
+              </button>
+
+              {message && (
+                <div className="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-gray-200">
+                  <p>{message}</p>
+                  {bookingCode && (
+                    <p className="mt-2 text-xs text-pink-200">
+                      Booking code: {bookingCode}
+                    </p>
+                  )}
+                </div>
+              )}
             </form>
           </div>
         </div>
       )}
     </>
-  )
+  );
+}
+
+function Field({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+}) {
+  return (
+    <label className="text-xs uppercase tracking-[0.3em] text-gray-400">
+      {label}
+      <input
+        required
+        type="date"
+        value={value}
+        onChange={onChange}
+        className="mt-2 w-full rounded-2xl border border-white/10 bg-black/40 px-3 py-3 text-white focus:border-pink-400 focus:outline-none"
+      />
+    </label>
+  );
 }
 
 function calcTotal(start: string, end: string, perDay: number) {
   try {
-    const s = new Date(start)
-    const e = new Date(end)
-    const days = Math.max(1, Math.ceil((e.getTime() - s.getTime()) / (1000*60*60*24)) + 1) // inclusive
-    return days * perDay
+    const s = new Date(start);
+    const e = new Date(end);
+    const diff =
+      Math.max(
+        1,
+        Math.ceil((e.getTime() - s.getTime()) / (1000 * 60 * 60 * 24))
+      ) + 1;
+    return diff * perDay;
   } catch {
-    return 0
+    return perDay;
   }
 }

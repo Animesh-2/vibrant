@@ -1,33 +1,54 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, ShieldCheck, Sparkles } from "lucide-react";
 import { useCart } from "@/lib/hooks/cart";
+import { usePathname } from "next/navigation";
+
+const links = [
+  { href: "/devices", label: "Devices" },
+  { href: "/caregivers", label: "Nurses" },
+  { href: "/dashboard", label: "Nurse Dashboard" },
+  { href: "/dashboard/verification", label: "AI Verify" },
+];
 
 export default function Navbar() {
   const { data: cart = [] } = useCart();
+  const pathname = usePathname();
 
   return (
-    <header className="border-b border-white/10 backdrop-blur-md bg-white/5 sticky top-0 z-50 shadow-[0_5px_20px_rgba(255,0,130,0.2)]">
-      <div className="w-full mx-auto px-4 py-6 flex items-center justify-between">
-        
-        <Link
-          href="/"
-          className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-pink-400 to-violet-400 bg-clip-text text-transparent"
-        >
-          MerilCare
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-[#060910]/90 backdrop-blur-xl">
+      <div className="mx-auto flex w-full items-center justify-between px-4 py-5">
+        <Link href="/" className="flex items-center gap-2">
+          <ShieldCheck className="h-6 w-6 text-pink-400" />
+          <span className="text-xl font-black tracking-tight text-white">
+            VIBRANT
+          </span>
         </Link>
 
-        <nav className="flex gap-6 items-center">
-          <Link href="/devices" className="text-sm hover:text-pink-400">Devices</Link>
-          <Link href="/caregivers" className="text-sm hover:text-pink-400">Caregivers</Link>
-          <Link href="/bookings" className="text-sm hover:text-pink-400">My Bookings</Link>
+        <nav className="hidden items-center gap-6 md:flex">
+          {links.map((item) => {
+            const active = pathname.startsWith(item.href);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`text-sm font-medium transition ${
+                  active ? "text-white" : "text-gray-400 hover:text-white"
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
 
           <Link href="/cart" className="relative">
-            <ShoppingCart size={24} className="text-gray-200 hover:text-white" />
-
+            <ShoppingCart
+              size={22}
+              className="text-gray-300 transition hover:text-white"
+            />
             {cart.length > 0 && (
-              <span className="absolute -top-2 -right-2 h-5 w-5 rounded-full text-xs flex items-center justify-center bg-pink-500 text-white">
+              <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-pink-500 text-[11px] font-semibold text-white">
                 {cart.length}
               </span>
             )}
@@ -35,12 +56,29 @@ export default function Navbar() {
 
           <Link
             href="/login"
-            className="ml-4 px-4 py-1.5 bg-gradient-to-r from-pink-500 to-violet-500 text-white rounded-md text-sm font-semibold hover:scale-105 transition-all"
+            className="flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-white transition hover:border-pink-500/70 hover:bg-pink-500/10"
           >
-            Login
+            <Sparkles size={16} />
+            Sign in
           </Link>
         </nav>
 
+        <div className="flex items-center gap-3 md:hidden">
+          <Link href="/cart" className="relative rounded-full border border-white/10 p-2">
+            <ShoppingCart size={18} className="text-white" />
+            {cart.length > 0 && (
+              <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-pink-500 text-[10px] text-white">
+                {cart.length}
+              </span>
+            )}
+          </Link>
+          <Link
+            href="/dashboard"
+            className="rounded-full bg-gradient-to-r from-pink-500 to-violet-500 px-4 py-2 text-xs font-semibold text-white"
+          >
+            Menu
+          </Link>
+        </div>
       </div>
     </header>
   );

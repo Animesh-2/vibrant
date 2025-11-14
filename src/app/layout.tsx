@@ -4,25 +4,22 @@ import Footer from "@/components/layout/Footer";
 import ReactQueryProvider from "@/components/providers/ReactQueryProvider";
 
 export const metadata = {
-  title: "MerilCare — Rental & Post-Discharge Care",
-  description: "Medical equipment rental & caregiver marketplace",
+  title: "VIBRANT | Rent devices, hire nurses, verify care with AI",
+  description:
+    "A healthcare commerce platform to rent medical devices, book caregivers, manage slots, and verify procedures through AI.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-[#0C0C0C] text-gray-100 flex flex-col">
-
+      <body className="flex min-h-screen flex-col bg-[#03060d] text-gray-100">
         <ReactQueryProvider>
           <Navbar />
-
-          <main className="flex-1 mx-auto px-4 py-10 w-full">
+          <main className="mx-auto w-full flex-1 px-4 py-10 sm:px-6 lg:px-10">
             {children}
           </main>
-
           <Footer />
         </ReactQueryProvider>
-
       </body>
     </html>
   );
